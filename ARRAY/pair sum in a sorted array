@@ -1,0 +1,18 @@
+#include <stdio.h>
+int main() {
+    int a[6]={1,5,7,10,11,16};
+    int sum=17,i=0,j=5;
+    while(i<=j){
+        if(a[i]+a[j]==sum){
+            printf("%d %d\n",a[i],a[j]);
+            i++;j--;
+        }
+        else if(a[i]+a[j]>sum){
+            j--;
+        }
+        else{
+            i++;
+        }
+    }
+    return 0;
+}
