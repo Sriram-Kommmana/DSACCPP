@@ -1,0 +1,22 @@
+#include <stdio.h>
+int main() {
+    int i=0,j=0,k=0,n=8,o;
+    int a[6]={1,2,2,2,3,4};
+    int b[4]={2,2,3,3};
+
+    while((i<8)&&(j<4)){
+        if(a[i]==b[j]){
+            printf("%d ", a[i]);
+            i++;
+            j++;
+        }
+        else if(a[i]>a[j]){
+            j++;
+        }
+        else{
+            i++;
+        }
+    }
+    
+    return 0;
+}
