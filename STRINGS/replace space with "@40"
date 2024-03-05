@@ -1,0 +1,15 @@
+#include <iostream>
+using namespace std;
+int main() {
+    std::string a="My name is khan";
+    for(int i=0;a[i]!='\0';i++){
+        if(a[i]==' '){
+            a[i]='@';
+            a.insert(i+1,"40");
+        }
+    }
+    cout<<a<<endl;
+    
+
+    return 0;
+}
