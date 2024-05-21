@@ -10,8 +10,40 @@ class Node{
         this->next=NULL;
     }
 };
-int main() {
+
+//Inserting at head 
+void insertathead(Node* &head,int d){
+    Node* temp=new Node(d);
+    temp->next=head;
+    head=temp;
+}
+
+//Inserting at tail
+void insertattail(Node* &tail,int d){
+    Node* temp=new Node(d);
+    tail->next=temp;
+    tail=temp;
     
+}
+//Printing the linked list
+void print(Node* &head){
+    Node* temp=head;
+    while(temp!=NULL){
+        cout<<temp->data<<" ";
+        temp=temp->next;
+    }
+}
+
+//Main function
+int main() {
+    Node* node1=new Node(5);
+    Node* head=node1;
+    Node* tail=node1;
+    insertathead(head,12);
+    insertathead(head,1);
+    insertathead(head,2);
+    insertattail(tail,100);
+    print(head);
 
     return 0;
 }
