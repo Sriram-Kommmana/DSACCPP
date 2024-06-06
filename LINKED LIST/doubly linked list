@@ -1,0 +1,99 @@
+#include <iostream>
+using namespace std;
+class Node{
+    public:
+    int data;
+    Node* prev;
+    Node* next;
+    Node(int data){
+        this->data=data;
+        this->prev=NULL;
+        this->next=NULL;
+    }
+};
+//Inserting at head
+void insertathead(Node* &head,Node* &tail,int d){
+    if(head==NULL){
+        Node* temp=new Node(d);
+        head=temp;
+        tail=temp;
+    }
+    else{
+        Node* temp=new Node(d);
+        temp->next=head;
+        head->prev=temp;
+        head=temp;
+    }
+}
+//Inserting at tail
+void insertattail(Node* &head,Node* &tail,int d){
+    if(head==NULL){
+        Node* temp=new Node(d);
+        head=temp;
+        tail=temp;
+    }
+    else{
+        Node* temp=new Node(d);
+        tail->next=temp;
+        temp->prev=tail;
+        tail=temp;
+    }
+}
+//Inserting at position 
+void insertataposition(Node* &head,Node* &tail,int d,int pos){
+    if(pos==1){
+        insertathead(head,tail,d);
+        return;
+    }
+    Node* temp=head;
+    int cnt=1;
+    while(cnt<pos-1){
+        temp=temp->next;
+        cnt++;
+    }
+    if(temp->next==NULL){
+        insertattail(head,tail,d);
+        return;
+    }
+    Node* insert=new Node(d);
+    insert->next=temp->next;
+    temp->next->prev=insert;
+    insert->prev=temp;
+    temp->next=insert;
+}
+//Inserting before a value
+void valueinsert(Node* &head,Node* &tail,int d,int val){
+    Node* temp=head;
+    while(temp->data!=val){
+        temp=temp->next;
+    }
+    Node* previous=temp->prev;
+    Node* insert=new Node(d);
+    insert->next=temp;
+    insert->prev=previous;
+    previous->next=insert;
+    temp->prev=insert;
+}
+//Printing the doubly linked list
+void print(Node* &head){
+    Node* temp=head;
+    while(temp!=NULL){
+        cout<<temp->data<<" ";
+        temp=temp->next;
+    }
+    cout<<endl;
+}
+//Main function 
+int main() {
+    Node* n1=new Node(5);
+    Node* head=n1;
+    Node* tail=n1;
+    insertathead(head,tail,12);
+    insertattail(head,tail,99);
+    insertataposition(head,tail,1000,3);
+    valueinsert(head,tail,69,1000);
+    print(head);
+    cout<<head->data<<" "<<tail->data<<endl;
+    
+    return 0;
+}
