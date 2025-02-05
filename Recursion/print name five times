@@ -1,0 +1,12 @@
+#include <iostream>
+using namespace std;
+void fn(int n){
+    if(n == 0) return;
+    cout<<"Sriram"<<endl;
+    fn(n-1);
+}
+int main() {
+    fn(5);
+
+    return 0;
+}
