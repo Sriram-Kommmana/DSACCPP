@@ -1,0 +1,22 @@
+#include<vector>
+#include<unordered_map>
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int,int> a;
+        int i = 0,j=nums.size() - 1;
+        for(int i=0;i<nums.size();i++){
+            int k=nums[i];
+            int rem=target-k;
+            if(a.find(rem)!=a.end()){
+                return {i,a[rem]};
+            }
+            a[nums[i]]=i;
+        }
+        return {};
+    }
+};
+
+
+//  IDHAR YE CONFUSION HAI KI WO IF WALA STATEMENT TO JAAKE STL PADHO -> WO YE BOLNA CHAH RHA HAI KI MAP KE END TAK TOH NHI PAHUCH GYE NA -> YAANI MAP KHATAM TO NHI HO GYA
+// YE WALA QUESTION 2 POINTER APPROACH SE BHI KIYA JA SKTA HAI AGAR ARRAY SORTED HO TO -> WARNA NHI KR SKTE
