@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int element = 0, count = 0;
+        int n = nums.size();
+
+        for(int i = 0; i<n; i++){
+            if(count == 0){
+                element = nums[i];
+                count++;
+            }
+            else if(nums[i] != element){
+                count--;
+            }
+            else{
+                count++;
+            }
+        }
+        return element;
+    }
+};
+
+
+// moore's voting algorithm
+// 2 variable lenge -> ek element, aur ek count
+// pehle array ke element se start krenge 
+// element = arr[i]
+// agar wahi number milta rha toh count++
+// agar dusra no. mila count--
+// agar count == 0 ho gya toh array ka next element element me store krenge
+//ye chlta rahega array pura travese karne tak
