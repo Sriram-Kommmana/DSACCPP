@@ -1,0 +1,44 @@
+class Solution {
+public:
+    void reverse(vector<int>& nums, int start, int end){
+        while(start < end){
+            swap(nums[start], nums[end]);
+            start++;
+            end--;
+        }
+    }
+    void nextPermutation(vector<int>& nums) {
+        int ind = -1, n = nums.size();
+        for(int i = n-2; i >= 0; i--){
+            if(nums[i] < nums[i+1]){
+                ind = i;
+                break;
+            }
+        }
+        if(ind == -1){
+            reverse(nums, 0, n-1);
+            return;
+        }
+        for(int i = n-1; i > ind; i--){
+            if(nums[i] > nums[ind]){
+                swap(nums[i], nums[ind]);
+                break;
+            }
+        }
+        reverse(nums, ind+1, n-1);
+
+    }
+};
+
+
+
+// YE WALA OPTIMAL APPROACH HAI 
+// BETTER SOLUTION HAI -> next_permutattion() -> ye ek method hai cpp main
+//
+// SO AAP KYA KRTE HO NA ISME KI ARRAY KO LONGEST MATCHING SUBARRAY BNANA CHAHTE HO -> DICTIONARY MAI JAISE bin KE BAAD bit AATA HAI -> YAHA bi COMMON HAI
+// SO AISE DHOONDNE KE KOSHISH ME REHTE HO 
+// KYA HOGA NA JAB AAP ARRAY PICHE SE TRAVERSE KAROGE TOH AAPKO NUMBERS KA MAGNITUDE INCREASE KREGA
+// LEKIN JAHA DIP KR RHA HAI WAHI SE PURA PERMUTATION CHANGE HOGA -- LET'S SAY US INDEX KO ind MAAN LETE HAIN
+// SO ind KE AAGE ind SE JUST BADA NUMBER DHOONDO AUR SWAP KR DO
+// USKE BAAD ind+1 INDEX SE LAST TAK ARRAY SORT KR DO
+// YAHA EK CATCH HAI AAPKO SORT KRNE KI ZAROORAT NHI HAI KYUNKI AGAR AAP REVERSE BHI KR DETE HO TOH WOH SORT HO JAYEGA
