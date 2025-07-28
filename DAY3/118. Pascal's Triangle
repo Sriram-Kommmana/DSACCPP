@@ -1,0 +1,81 @@
+// naive solution
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int nCr(int n, int r) {
+    long long res = 1;
+
+    // calculating nCr:
+    for (int i = 0; i < r; i++) {
+        res = res * (n - i);
+        res = res / (i + 1);
+    }
+    return (int)(res);
+}
+
+vector<vector<int>> pascalTriangle(int n) {
+    vector<vector<int>> ans;
+
+    //Store the entire pascal's triangle:
+    for (int row = 1; row <= n; row++) {
+        vector<int> tempLst; // temporary list
+        for (int col = 1; col <= row; col++) {
+            tempLst.push_back(nCr(row - 1, col - 1));
+        }
+        ans.push_back(tempLst);
+    }
+    return ans;
+}
+
+int main()
+{
+    int n = 5;
+    vector<vector<int>> ans = pascalTriangle(n);
+    for (auto it : ans) {
+        for (auto ele : it) {
+            cout << ele << " ";
+        }
+        cout << "n";
+    }
+    return 0;
+}
+
+// THE ABOVE SOLUTION WILL TAKE N^3 COMPLEXITY
+
+
+// OPTIMAL APPROACH
+// Algorithm / Intuition
+// Approach:
+// The steps are as follows:
+
+// First, we will run a loop(say row) from 1 to n.
+// Inside the loop, we will call a generateRow() function and add the returned list to our final answer. Inside the function we will do the following:
+// First, we will store the 1st element i.e. 1 manually.
+// After that, we will use a loop(say col) that runs from 1 to n-1. It will store the rest of the elements.
+// Inside the loop, we will use the specified formula to print the element. We will multiply the previous answer by (row-col) and then divide it by col itself.
+// Thus, the entire row will be stored and returned.
+// Finally, we will return the answer list.
+
+class Solution {
+public:
+    vector<int> generateRow(int row){
+        vector<int> temp;
+        temp.push_back(1);
+        int ans = 1;
+
+        for(int col = 1; col < row; col++){
+            ans = ans * (row - col);
+            ans = ans / col;
+            temp.push_back(ans);
+        }
+        return temp;
+    }
+    vector<vector<int>> generate(int numRows) {
+        vector<vector<int>> ans;
+        for(int row = 1; row <= numRows; row++){
+            ans.push_back(generateRow(row));
+        }
+        return ans;
+    }
+};
