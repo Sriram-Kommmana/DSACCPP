@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int n = nums.size();
+        int pre = 1, suf = 1;
+        int ans = INT_MIN;
+
+        for(int i = 0; i < n; i++){
+            if(pre == 0) pre = 1;
+            if(suf == 0) suf = 1;
+
+            pre = pre * nums[i];
+            suf = suf * nums[n-i-1];
+
+            ans = max({ans, pre, suf});
+        }
+        return ans;
+    }
+};
+
+// we are keeping prefix sum and suffix sum and finding its max
+// why are we doing this?
+// if even no. of negatives are present then it okay but if odd no. negatives then ?
+// so thats why we are finding prefix and suffix sum
+// what if you encounder a 0?
+// if you encounter a zero while doing prefix sum or suffix sum then those will become zero
+// so if the prefix sum or suffix sum is zero we reinitialise it to 1
