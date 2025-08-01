@@ -1,0 +1,28 @@
+class Solution {
+public:
+    void dfs(int nx, int ny, vector<vector<int>>& image, vector<vector<int>>& image_new, int color, int* x,int* y, int startingColor){
+        image_new[nx][ny] = color;
+        int m = image.size();
+        int n = image[0].size();
+        for(int i = 0; i<4; i++){
+            int nrow = nx + x[i];
+            int ncol = ny + y[i];
+
+            if(nrow >= 0 && nrow <m && ncol>=0 && ncol<n && image[nrow][ncol] == startingColor && image_new[nrow][ncol] != color){
+                dfs(nrow, ncol, image, image_new, color, x, y, startingColor);
+            }
+        }
+    }
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+        vector<vector<int>> image_new = image;
+        int startingColor = image[sr][sc];
+        image_new[sr][sc] = color;
+
+        int x[] = {0, 0, 1, -1};
+        int y[] = {1, -1, 0, 0};
+
+        dfs(sr, sc, image, image_new, color, x, y, startingColor);
+
+        return image_new;
+    }
+};
