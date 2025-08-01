@@ -1,0 +1,89 @@
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int m = grid.size(), n = grid[0].size();
+        int minutes = 0, freshCount = 0, count = 0;
+        queue<pair<pair<int,int>, int>> rotten;
+        vector<vector<int>> visited(m, vector<int>(n, 0));
+
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(grid[i][j] == 2){
+                    rotten.push({{i, j}, 0});
+                    visited[i][j] = 2;
+                }
+                else if(grid[i][j] == 1) freshCount++;
+            }
+        }
+
+        int x[] = {0, 0, 1, -1};
+        int y[] = {1, -1, 0, 0};
+        while(!rotten.empty()){
+            int xCord = rotten.front().first.first;
+            int yCord = rotten.front().first.second;
+            int t = rotten.front().second; 
+
+            rotten.pop();
+            
+            minutes = max(minutes, t);
+            for(int i = 0; i < 4; i++){
+                int nx = xCord + x[i];
+                int ny = yCord + y[i];
+                if(nx >= 0 && nx < m && ny >= 0 && ny < n && visited[nx][ny] == 0 && grid[nx][ny] == 1){
+                    visited[nx][ny] = 2;
+                    rotten.push({{nx, ny}, t+1});
+                    count++;
+                }
+            }
+
+        }
+        if(count != freshCount) return -1;
+        return minutes;
+
+    }
+};
+
+
+
+
+
+
+
+or 
+
+a bit optimised one
+class Solution {
+public:
+    vector<vector<int>>dir = {{1,0},{-1,0},{0,1},{0,-1}};
+    int orangesRotting(vector<vector<int>>& grid) {
+        int n = grid.size(),m = grid[0].size(),freshOrange = 0;
+        queue<pair<int,int>>q;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j] == 2) q.push({i,j});
+                if(grid[i][j] == 1) freshOrange++;
+            }
+        }
+        if(!freshOrange) return 0;
+        int time = -1;
+        while(!q.empty()){
+            int level_size = q.size();
+            while(level_size--){
+                auto p = q.front();q.pop();
+                int row = p.first,col = p.second;
+                for(int k=0;k<4;k++){
+                    int row_idx = row+dir[k][0];
+                    int col_idx = col+dir[k][1];
+                    if(row_idx<0 || row_idx>=n || col_idx<0 || col_idx >=m || grid[row_idx][col_idx] == 2 || grid[row_idx][col_idx] == 0) continue;
+                    grid[row_idx][col_idx] = 2;
+                    q.push({row_idx,col_idx});
+                    freshOrange--;
+                }
+            }
+            time++;
+        }
+
+        return (freshOrange == 0) ? time : -1;
+    }
+};
+
