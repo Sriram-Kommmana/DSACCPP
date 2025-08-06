@@ -1,0 +1,5 @@
+// Step 1 -> Do a topo sort on the graph
+// Step 2 -> Once the source node is given, pop the elements in the stack until the stack's top is the source
+// Step 3 -> You will have a distance array - in that initialze every element of the array as infinity except the source node 
+// Step 4 -> Initialize distance of source node = 0
+// Step 5 -> take elements from the stack one by one and kepp updating the distance array
