@@ -3,4 +3,5 @@
 // initializing a queue of pairs <node, distance>
 // push <src,0> into the queue
 // then do a bfs and increase the distance by 1 and keep updating the distance array
-// here also we dont need visited array, we are good to go with distance array, if you get a distance that is greater than the distance in the distance array then you have to reject that pair - which is not update the dist.array and not to put in queue
+// here also we dont need visited array, we are good to go with distance array, if you get a distance that is greater than the distance in the distance array then you have to reject that pair 
+//    - which is not update the dist.array and not to put in queue
