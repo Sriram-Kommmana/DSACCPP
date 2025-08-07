@@ -3,3 +3,65 @@
 // Step 3 -> You will have a distance array - in that initialze every element of the array as infinity except the source node 
 // Step 4 -> Initialize distance of source node = 0
 // Step 5 -> take elements from the stack one by one and kepp updating the distance array
+
+
+class Solution {
+  public:
+    void topoSort(int node,int visited[], vector<pair<int, int>> adj[], stack<int>& st){
+        visited[node] = 1;
+        
+        for(auto element: adj[node]){
+            int neighbour = element.first;
+            
+            if(!visited[neighbour]) topoSort(neighbour, visited, adj, st);
+        }
+        
+        st.push(node);
+    }
+  
+    vector<int> shortestPath(int V, int E, vector<vector<int>>& edges) {
+        
+        stack<int> st;
+        
+        vector<pair<int, int>> adj[V];
+        int visited[V] = {0};
+        
+        for(int i = 0; i < E; i++){
+            int from = edges[i][0];
+            int to = edges[i][1];
+            int dist = edges[i][2];
+            
+            adj[from].push_back({to, dist});
+        }
+        
+        for(int i = 0; i < V; i++){
+            if(!visited[i]) topoSort(i, visited, adj, st);
+        }
+        
+        
+        vector<int> distance(V, INT_MAX);
+        
+        distance[0] = 0;
+        
+        while(!st.empty()){
+            int node = st.top();
+            st.pop();
+            
+            if (distance[node] == INT_MAX) continue;  // skip unreachable nodes
+            
+            for(auto it: adj[node]){
+                int element = it.first;
+                int dis = it.second;
+                
+                if(distance[node] + dis < distance[element]) distance[element] = distance[node] + dis;
+            }
+        }
+        
+        for(int i = 0; i < V; i++){
+            if(distance[i] == INT_MAX) distance[i] = -1;
+        }
+        
+        return distance;
+        
+    }
+};
