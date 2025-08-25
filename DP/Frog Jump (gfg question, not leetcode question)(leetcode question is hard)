@@ -1,0 +1,62 @@
+class Solution {
+  public:
+  
+    int solve(vector<int>& height, int index){
+        if(index == 0) return 0;
+        
+        int left = solve(height, index - 1) + abs(height[index] - height[index - 1]);
+        int right = INT_MAX;
+        if(index > 1){
+            right = solve(height, index - 2) + abs(height[index] - height[index - 2]);
+        }
+        
+        return min(left, right);
+    }
+    
+    int solveMem(vector<int>& height, int index, vector<int>& dp){
+        
+        if(index == 0) return 0;
+        
+        if(dp[index] != -1) return dp[index];
+        
+        int left = solveMem(height, index - 1, dp) + abs(height[index] - height[index - 1]);
+        int right = INT_MAX;
+        if(index > 1){
+            right = solveMem(height, index - 2, dp) + abs(height[index] - height[index - 2]);
+        }
+        
+        dp[index] = min(left, right);
+        
+        return dp[index];
+    }
+    
+    int solveTab(vector<int>& height){
+        int n = height.size();
+        
+        vector<int> dp(n, -1);
+        
+        dp[0] = 0;
+        
+        for(int index = 1; index < n; index++){
+            int left = dp[index - 1] + abs(height[index] - height[index - 1]);
+            int right = INT_MAX;
+            if(index > 1){
+                right = dp[index - 2] + abs(height[index] - height[index - 2]);
+            }
+            dp[index] = min(left, right);
+        }
+        return dp[n - 1];
+    }
+    
+    int minCost(vector<int>& height) {
+        
+        int n = height.size();
+        // int ans = solve(height, n - 1);
+        // vector<int> dp(n, -1);
+        // int ansMem = solveMem(height, n - 1, dp);
+        
+        int ansTab = solveTab(height);
+        return ansTab;
+        
+    }
+};
