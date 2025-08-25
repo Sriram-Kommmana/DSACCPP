@@ -1,0 +1,65 @@
+class Solution {
+public:
+    int solve(vector<int>& nums, int start, int end){
+        if(end < start) return 0;
+
+        int include = nums[end] + solve(nums, start, end - 2);
+        int exclude = 0 + solve(nums, start, end - 1);
+
+        return max(include, exclude);
+    }
+
+    int solveMem(vector<int>& nums, int start, int end, vector<int>& dp){
+        if(end < start) return 0;
+
+        if(dp[end] != -1) return dp[end];
+
+        int include = nums[end] + solveMem(nums, start, end - 2, dp);
+        int exclude = 0 + solveMem(nums, start, end - 1, dp);
+
+        return dp[end] = max(include, exclude);
+    }
+
+    int solveTab(vector<int>& nums, int start, int end){
+
+        int n = nums.size();
+
+        int len = end - start + 1;
+        if(len == 0) return 0;
+        if(len == 1) return nums[start];
+
+        vector<int> dp(len, -1);
+
+        dp[0] = nums[start];
+        dp[1] = max(nums[start], nums[start + 1]);
+
+        for(int i = 2; i < len; i++){
+            dp[i] = max(nums[start + i] + dp[i - 2], dp[i - 1]);
+        }
+
+        return dp[len - 1];
+
+    }
+    int rob(vector<int>& nums) {
+        int n = nums.size();
+
+        if(n == 1) return nums[0];
+
+        // int ans1 = solve(nums, 0, n-2);
+        // int ans2 = solve(nums, 1, n-1);
+
+        // return max(ans1, ans2);
+
+        // vector<int> dp1(n, -1);
+        // vector<int> dp2(n, -1);
+        // int ans1 = solveMem(nums, 0, n - 2, dp1);
+        // int ans2 = solveMem(nums, 1, n - 1, dp2);
+
+        // return max(ans1, ans2);
+
+        int ans1 = solveTab(nums, 0, n - 2);
+        int ans2 = solveTab(nums, 1, n - 1);
+
+        return max(ans1, ans2);
+    }
+};
