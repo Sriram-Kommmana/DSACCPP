@@ -60,3 +60,9 @@ class Solution {
         
     }
 };
+
+
+
+
+// follow up question -> the maximum you can jump is k distance right? what if it is given you can jump uptp k distance
+// ->then you just have to call those ina for loop that it
