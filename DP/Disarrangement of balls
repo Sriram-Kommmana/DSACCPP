@@ -1,0 +1,54 @@
+// User function Template for C++
+
+class Solution {
+  public:
+    int solveMem(int n, vector<int>& dp){
+        if(n == 1) return 0;
+        if(n == 2) return 1;
+        
+        if(dp[n] != -1) return dp[n];
+        
+        return dp[n] = (n - 1) * (solveMem(n - 1, dp) + solveMem(n - 2, dp));
+    }
+    
+    int solveTab(int n){
+        
+        vector<int> dp(n + 1, -1);
+        
+        dp[1] = 0;
+        dp[2] = 1;
+        
+        for(int i = 3; i <= n; i++){
+            dp[i] = (i - 1) * (dp[i - 2] + dp[i - 1]);
+        }
+        
+        return dp[n];
+    }
+    
+    int SO(int n) {
+        
+        int prev2 = 0;
+        int prev1 = 1;
+        
+        if(n == 1) return 0;
+        if(n == 2) return 1;
+        
+        int curr;
+        for(int i = 3; i <= n; i++){
+            curr = (i - 1) * (prev2 + prev1);
+            prev2 = prev1;
+            prev1 = curr;
+        }
+        return curr;
+        
+    }
+    
+    int countDer(int n) {
+        // vector<int> dp(n + 1, -1);
+        // int ans = solveMem(n, dp);
+        
+        // int ans = solveTab(n);
+        int ans = SO(n);
+        return ans;
+    }
+};
