@@ -1,0 +1,57 @@
+class Solution {
+public:
+    int solve(vector<int>& nums, int target){
+        if(target < 0) return 0;
+        if(target == 0) return 1;
+
+        int ans = 0;
+        for(int i = 0; i < nums.size(); i++){
+            ans += solve(nums, target - nums[i]);
+        }
+
+        return ans;
+    }
+
+    int solveMem(vector<int>& nums, int target,vector<int>& dp){
+        if(target < 0) return 0;
+        if(target == 0) return 1;
+
+        if(dp[target] != -1) return dp[target];
+
+        int ans = 0;
+        for(int i = 0; i < nums.size(); i++){
+            ans += solveMem(nums, target - nums[i], dp);
+        }
+
+        return dp[target] = ans;
+    }
+
+    int solveTab(vector<int>& nums, int target){
+
+        vector<long long> dp(target + 1, 0);
+
+        dp[0] = 1;
+
+        for(int k = 1; k <= target; k++){
+            for(int i = 0; i < nums.size(); i++){
+                if(k - nums[i] >= 0)
+                    dp[k] += dp[k - nums[i]];
+                    if (dp[k] > INT_MAX) dp[k] = INT_MAX;
+            }
+        }
+
+        return dp[target];
+
+    }
+
+    int combinationSum4(vector<int>& nums, int target) {
+        // int ans = solve(nums, target);
+
+        // vector<int> dp(target + 1, -1);
+        // int ans = solveMem(nums, target, dp);
+
+        long long ans = solveTab(nums, target);
+        if(ans > INT_MAX) return INT_MAX; // or handle overflow gracefully
+        return (int)ans;
+    }
+};
