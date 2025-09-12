@@ -29,3 +29,27 @@ public:
         return solve(root) != -1;
     }
 };
+
+// balanced binary tree ka left subtree ka height aur right subtree ka height ka difference <= 1 hota hai.
+// iska intuition bas yahi hai ki agar balances hai toh height of the tree return hoga. nahi toh -1 return hoga.
+
+
+pair<bool, int> isBalanced(Node* root){
+    if(root == NULL) return {true, 0};
+
+    pair<bool, int> left = isBalanced(root -> left);
+    pair<bool, int> right = isBalanced(root -> right);
+
+    bool isLeft = left.first;
+    bool isRight = right.first;
+
+    bool diff = abs(left.second - right.second) <= 1;
+
+    pair<bool, int> ans;
+    ans.first = isLeft && isRight && diff;
+    ans.second = max(left.second, right.second) + 1;
+    return ans;
+}
+bool Balanced(Node* root){
+    return isBalanced(root).first;
+}
