@@ -26,3 +26,11 @@ public:
         return maxi;
     }
 };
+
+
+// The function solve computes the maximum path sum starting from each node.
+// At each node, it calculates:
+// -> The best path sum from its left and right children (ignoring negative contributions).
+// -> Updates the global maxi variable to track the best path sum found so far, considering both sides of the current node.
+// -> Returns the best sum for the parent to use, which is either the left or right path plus the node's value.
+
