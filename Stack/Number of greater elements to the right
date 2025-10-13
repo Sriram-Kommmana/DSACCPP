@@ -1,0 +1,123 @@
+// Given an array of arr[] and Q queries of indices. For each query indices[i], determine the count of elements in arr that are strictly greater than arr[indices[i]] to its right (after the position indices[i]).
+
+
+
+class Solution {
+  public:
+
+    vector<int> count_NGE(vector<int> &arr, vector<int> &indices) {
+        
+        int n = arr.size();
+        stack<int> st1, st2;
+        vector<int> store(n);
+        int temp;
+        
+        for(int i = n - 1; i >= 0; i--){
+            
+            
+            while(!st2.empty() && st2.top() > arr[i]){
+                temp = st2.top();
+                st2.pop();
+                st1.push(temp);
+            }
+            
+            while(!st1.empty() && st1.top() <= arr[i]){
+                temp = st1.top();
+                st1.pop();
+                st2.push(temp);
+            }
+            
+            store[i] = st1.size();
+            
+            st1.push(arr[i]);
+            
+        }
+        
+        int ansSize = indices.size();
+        vector<int> ans;
+        for(int i = 0; i < ansSize; i++){
+            int index = indices[i];
+            ans.push_back(store[index]);
+        }
+        
+        return ans;
+        
+    }
+};
+
+
+/*
+### 🪜 **1. Traverse the array from right to left**
+
+* **Why:**
+  Each element’s “next greater elements” lie **to its right**, so we must process from right to left to already have those elements available.
+
+---
+
+### 🪜 **2. Use two stacks (`st1` and `st2`)**
+
+* **Why:**
+
+  * `st1` temporarily stores **greater elements** than the current number.
+  * `st2` holds **smaller or equal elements**.
+    Moving elements between them helps in separating greater elements dynamically.
+
+---
+
+### 🪜 **3. Move elements greater than the current element from `st2` → `st1`**
+
+* **Why:**
+  Ensures all **greater elements** are collected together in one place (`st1`) for easy counting.
+
+---
+
+### 🪜 **4. Move elements ≤ current element from `st1` → `st2`**
+
+* **Why:**
+  Removes all elements that are **not greater** than the current element, keeping only those strictly greater in `st1`.
+
+---
+
+### 🪜 **5. Record the size of `st1`**
+
+* **Why:**
+  The **number of elements in `st1`** after filtering equals the **count of greater elements to the right** of the current element.
+
+---
+
+### 🪜 **6. Push the current element into `st1`**
+
+* **Why:**
+  The current element now becomes part of the “right side” for the next (previous in array) element’s comparison.
+
+---
+
+### 🪜 **7. After processing all elements, collect results for required indices**
+
+* **Why:**
+  Only some indices are needed (from `indices` vector). We use the stored counts to return those specific answers.
+
+---
+
+### 🪜 **8. Return the result vector**
+
+* **Why:**
+  Gives the count of next greater elements for each requested index — final output.
+
+---
+
+### ⚙️ **9. Summary of logic**
+
+* Uses **two stacks** to simulate the shifting of elements between “greater” and “non-greater” groups.
+* For every element, counts how many greater elements exist to its right.
+* **Main goal:** To compute count of “Next Greater Elements” for selected indices.
+
+---
+
+### ⏱️ **10. Complexity significance**
+
+* **Time:** O(n²) — because elements may be moved back and forth between two stacks.
+* **Space:** O(n) — for the stacks and storage.
+
+---
+*/
