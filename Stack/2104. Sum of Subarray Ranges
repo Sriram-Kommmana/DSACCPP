@@ -1,0 +1,116 @@
+class Solution {
+public:
+    vector<int> nextSmaller(vector<int>& arr, int n){
+
+        stack<int> st;
+        vector<int> ans(n);
+
+        for(int i = n - 1; i >= 0; i--){
+
+            while(!st.empty() && arr[st.top()] >= arr[i]){
+                st.pop();
+            }
+            ans[i] = st.empty() ? n : st.top();
+
+            st.push(i);
+
+        } 
+        return ans;
+
+    }
+
+    vector<int> nextGreater(vector<int>& arr, int n){
+        stack<int> st;
+        vector<int> ans(n);
+
+        for(int i = n - 1; i >= 0; i--){
+
+            while(!st.empty() && arr[st.top()] <= arr[i]){
+                st.pop();
+            }
+            ans[i] = st.empty() ? n : st.top();
+
+            st.push(i);
+
+        } 
+        return ans;
+    }
+
+    vector<int> previousSmallerEqual(vector<int>& arr, int n){
+
+        stack<int> st;
+        vector<int> ans(n);
+
+        for(int i = 0; i < n; i++){
+
+            while(!st.empty() && arr[st.top()] > arr[i]){
+                st.pop();
+            }
+
+            ans[i] = st.empty() ? -1 : st.top();
+
+            st.push(i);
+
+        }
+        return ans;
+
+    }
+
+    vector<int> previousGreaterEqual(vector<int>& arr, int n){
+
+        stack<int> st;
+        vector<int> ans(n);
+
+        for(int i = 0; i < n; i++){
+
+            while(!st.empty() && arr[st.top()] < arr[i]){
+                st.pop();
+            }
+
+            ans[i] = st.empty() ? -1 : st.top();
+
+            st.push(i);
+
+        }
+        return ans;
+
+    }
+
+    long long sumSubarrayMins(vector<int>& arr){
+        int n = arr.size();
+        
+        vector<int> nse = nextSmaller(arr, n);
+        vector<int> psee = previousSmallerEqual(arr, n);
+
+        long long ans = 0;
+
+        for(int i = 0; i < n; i++){
+            long long temp = (long long)arr[i] * (nse[i] - i) * (i - psee[i]);
+            ans = (ans + temp);
+        }
+
+        return ans;
+    }
+
+    long long sumSubarrayMaxs(vector<int>& arr){
+        int n = arr.size();
+        
+        vector<int> nge = nextGreater(arr, n);
+        vector<int> pgee = previousGreaterEqual(arr, n);
+
+        long long ans = 0;
+
+        for(int i = 0; i < n; i++){
+            long long temp = (long long)arr[i] * (nge[i] - i) * (i - pgee[i]);
+            ans = (ans + temp);
+        }
+
+        return ans;
+    }
+
+    long long subArrayRanges(vector<int>& nums) {
+
+        return (sumSubarrayMaxs(nums) - sumSubarrayMins(nums));
+        
+    }
+};
