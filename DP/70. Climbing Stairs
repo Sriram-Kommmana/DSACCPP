@@ -27,12 +27,29 @@ public:
         return dp[n];
     }
 
+    int solveSO(int n){
+
+        int one = 1;
+        int two = 1;
+        if(n == 0 || n == 1) return 1;
+        
+        int ans = 1;
+        for(int i = 2; i <= n; i++){
+            ans = one + two;
+            one = two;
+            two = ans;
+        }
+
+        return ans;
+    }
+
     int climbStairs(int n) {
 
         vector<int> dp(n+1, -1);
         //int ans = solve(n);
         //int ansMem = solveMem(n, dp);
-        int ansTab = solveTab(n);
+        // int ansTab = solveTab(n);
+        int ansTab = solveSO(n);
         return ansTab;
     }
 };
