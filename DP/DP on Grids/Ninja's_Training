@@ -1,0 +1,101 @@
+class Solution {
+  public:
+    int solve(vector<vector<int>>& arr, int index, int n, int prevTask){
+        
+        if(index == n - 1){
+            int maxi = 0;
+            
+            for(int i = 0; i < 3; i++){
+                if(i != prevTask){
+                    maxi = max(maxi, arr[n - 1][i]);
+                }
+            }
+            
+            return maxi;
+        }
+        
+        int ans = 0;
+        for(int i = 0; i < 3; i++){
+
+            if(i != prevTask){
+                int ans1 = arr[index][i] + solve(arr, index + 1, n, i);
+                ans = max(ans, ans1);
+            }
+        }
+        
+        return ans;
+        
+    }
+    
+    int solveMem(vector<vector<int>>& arr, int index, int n, int prevTask, vector<vector<int>>& dp){
+        
+        if(index == n - 1){
+            int maxi = 0;
+            
+            for(int i = 0; i < 3; i++){
+                if(i != prevTask){
+                    maxi = max(maxi, arr[n - 1][i]);
+                }
+            }
+            
+            return maxi;
+        }
+        
+        if(dp[index][prevTask] != -1) return dp[index][prevTask];
+        
+        int ans = 0;
+        for(int i = 0; i < 3; i++){
+
+            if(i != prevTask){
+                int ans1 = arr[index][i] + solveMem(arr, index + 1, n, i, dp);
+                ans = max(ans, ans1);
+            }
+        }
+        
+        return dp[index][prevTask] = ans;
+        
+    }
+    
+    int solveTab(vector<vector<int>>& arr, int n){
+        
+        
+        vector<vector<int>> dp(n, vector<int>(4, -1));
+        
+        dp[0][0] = max(arr[0][1], arr[0][2]);
+        dp[0][1] = max(arr[0][0], arr[0][2]);
+        dp[0][2] = max(arr[0][1], arr[0][0]);
+        dp[0][3] = max({arr[0][0], arr[0][1], arr[0][2]});
+        
+        
+        for(int k = 1; k < n; k++){
+            for(int l = 0; l < 4; l++){
+                
+                for(int i = 0; i < 3; i++){
+        
+                    if(i != l){
+                        int ans1 = arr[k][i] + dp[k - 1][i];
+                        dp[k][l] = max(dp[k][l], ans1);
+                    }
+                }
+                
+            }
+        }
+        
+        return dp[n - 1][3];
+        
+        
+    }
+    
+    int maximumPoints(vector<vector<int>>& arr) {
+        
+        int n = arr.size();
+        //int ans = solve(arr, 0, n, 3);
+        
+        // vector<vector<int>> dp(n, vector<int>(4, -1));
+        // int ans = solveMem(arr, 0, n, 3, dp);
+        
+        int ans = solveTab(arr, n);
+        return ans;
+        
+    }
+};
