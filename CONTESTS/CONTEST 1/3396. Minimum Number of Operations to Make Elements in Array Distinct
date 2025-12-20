@@ -1,0 +1,57 @@
+class Solution {
+public:
+    int minimumOperations(vector<int>& nums) {
+        
+        int n = nums.size(), count = 0;
+
+        map<int, int> mp;
+
+        for(int i = n - 1; i >= 0; i--){
+            if(mp[nums[i]]) break;
+            mp[nums[i]]++;
+            count++;
+        }
+
+        return ((n - count + 2) / 3);
+
+    }
+};
+
+
+
+
+'''
+
+* The goal is to make all elements in the array **distinct** by removing elements **only from the beginning**, in chunks of 3.
+
+* Since we cannot remove elements from the end, the best strategy is to **keep the longest possible suffix** of the array that already has all distinct elements.
+
+* The code starts traversing the array **from the end** to find this longest suffix.
+
+* A `map` (`mp`) is used to keep track of elements that have already been seen.
+
+* While moving from right to left:
+
+  * If the current element is **not present** in the map, it is added and `count` is increased.
+  * If a **duplicate** element is found, the loop stops because adding it would break the distinct property.
+
+* After the loop:
+
+  * `count` represents the number of elements in the largest suffix that already has all unique values.
+  * `n - count` gives the number of elements at the **beginning** that must be removed.
+
+* Since each operation removes **3 elements from the beginning**, the number of required operations is:
+
+  ```
+  ceil((n - count) / 3)
+  ```
+
+  which is computed using:
+
+  ```
+  (n - count + 2) / 3
+  ```
+
+* This value is returned as the **minimum number of operations** needed.
+
+'''
