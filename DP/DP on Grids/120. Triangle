@@ -1,0 +1,84 @@
+class Solution {
+public:
+
+    int solve(vector<vector<int>>& triangle, int i, int j, int n){
+        if(i == n - 1) return triangle[n - 1][j];
+
+        int ans;
+
+        int down = triangle[i][j] + solve(triangle, i + 1, j, n);
+        int diagonal = triangle[i][j] + solve(triangle, i + 1, j + 1, n);
+        ans = min(down, diagonal);
+
+        return ans;
+    }
+
+    int solveMem(vector<vector<int>>& triangle, int i, int j, int n, vector<vector<int>>& dp){
+
+        if(i == n - 1) return triangle[n - 1][j];
+        if(dp[i][j] != -1) return dp[i][j];
+
+        int ans;
+
+        int down = triangle[i][j] + solveMem(triangle, i + 1, j, n, dp);
+        int diagonal = triangle[i][j] + solveMem(triangle, i + 1, j + 1, n, dp);
+        ans = min(down, diagonal);
+
+        return dp[i][j] = ans;
+
+    }
+
+    int solveTab(vector<vector<int>>& triangle, int n){
+
+        vector<vector<int>> dp(n, vector<int>(n, 0));
+
+        for(int i = 0; i < n; i++){
+            dp[n - 1][i] = triangle[n - 1][i];
+        }
+
+        for(int i = n - 2; i >= 0; i--){
+            for(int j = 0; j <= i; j++){
+                int down = triangle[i][j] + dp[i + 1][j];
+                int diagonal = triangle[i][j] + dp[i + 1][j + 1];
+                dp[i][j] = min(down, diagonal);
+            }
+        }
+
+        return dp[0][0];
+
+    }
+
+    int solveSO(vector<vector<int>>& triangle, int n){
+
+        vector<int> bottom(n, 0);
+        for(int i = 0; i < n; i++){
+            bottom[i] = triangle[n - 1][i];
+        }
+
+        for(int i = n - 2; i >= 0; i--){
+            vector<int> top(n, 0);
+            for(int j = 0; j <= i; j++){
+                int down = triangle[i][j] + bottom[j];
+                int diagonal = triangle[i][j] + bottom[j + 1];
+                top[j] = min(down, diagonal);
+            }
+            bottom = top;
+        }
+        return bottom[0];
+    }
+
+    int minimumTotal(vector<vector<int>>& triangle) {
+
+        int n = triangle.size();
+        // int ans = solve(triangle, 0, 0, n);
+
+        // vector<vector<int>> dp(n, vector<int>(n, -1));
+        // int ans = solveMem(triangle, 0, 0, n, dp);
+
+        // int ans = solveTab(triangle, n);
+
+        int ans = solveSO(triangle, n);
+        return ans;
+
+    }
+};
