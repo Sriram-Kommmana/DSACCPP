@@ -1,0 +1,41 @@
+// To solve this problem, I used the Subset Sum approach. First, I computed the total sum of the array; if it is odd, it is impossible to partition the array into two equal subsets. If the sum is even, the problem reduces to checking whether there exists a subset with sum equal to half of the total sum. I used dynamic programming where dp[i][j] indicates whether a sum i can be formed using elements from index 0 to j. For each element, I either include it or exclude it, and the final answer is whether dp[targetSum][n-1] is true.
+
+class Solution {
+public:
+    bool solveTab(vector<int>& arr, int sum, int n) {
+        
+        vector<vector<bool>> dp(sum + 1, vector<bool>(n, false));
+    
+        for (int j = 0; j < n; j++)
+            dp[0][j] = true;
+    
+        if (arr[0] <= sum)
+            dp[arr[0]][0] = true;
+    
+        for (int i = 1; i <= sum; i++) {
+            for (int j = 1; j < n; j++) {
+                bool notTake = dp[i][j - 1];
+                bool take = (arr[j] <= i) ? dp[i - arr[j]][j - 1] : false;
+                dp[i][j] = take || notTake;
+            }
+        }
+    
+        return dp[sum][n - 1];
+    }
+
+    bool canPartition(vector<int>& nums) {
+        
+        int n = nums.size();
+
+        int sum = 0;
+        for(int i = 0; i < n; i++){
+            sum += nums[i];
+        }
+        
+        if(sum % 2 != 0) return false;
+
+        int ans = solveTab(nums, sum / 2, n);
+        return ans;
+
+    }
+};
