@@ -1,0 +1,120 @@
+class Solution {
+    
+  public:
+    
+    bool solve(vector<int>& arr, int sum, int index){
+        
+        if(sum == 0) return true;
+        
+        if(index == 0) return sum == arr[index];
+        
+        bool notTake = solve(arr, sum, index - 1);
+        bool take = (arr[index] <= sum) ? solve(arr, sum - arr[index], index - 1) : false;
+        
+        return take || notTake;
+        
+    }
+    
+    bool solveMem(vector<int>& arr, int sum, int index, vector<vector<int>>& dp){
+        
+        if(sum == 0) return true;
+        
+        if(index == 0) return sum == arr[index];
+        
+        if(dp[sum][index] != -1) return dp[sum][index];
+        
+        bool notTake = solveMem(arr, sum, index - 1, dp);
+        bool take = (arr[index] <= sum) ? solveMem(arr, sum - arr[index], index - 1, dp) : false;
+        
+        return dp[sum][index] = take || notTake;
+        
+    }
+    
+    bool solveTab(vector<int>& arr, int sum, int n){
+        
+        vector<vector<int>> dp(sum + 1, vector<int>(n, -1));
+        
+        for(int i = 0; i < n; i++){
+            dp[0][i] = 1;
+        }
+        
+        for(int i = 1; i <= sum; i++){
+            dp[i][0] = (i == arr[0]);
+        }
+        
+        for(int i = 1; i <= sum; i++){
+            for(int j = 1; j < n; j++){
+                int notTake = dp[i][j - 1];
+                int take = (arr[j] <= i) ?  dp[i - arr[j]][j - 1] : 0;
+                
+                dp[i][j] = take || notTake;
+            }
+        }
+        
+        return dp[sum][n - 1];
+        
+    }
+    
+    bool solveTabCleanedVersion(vector<int>& arr, int sum, int n) {
+        vector<vector<bool>> dp(sum + 1, vector<bool>(n, false));
+    
+        // sum = 0 is always possible
+        for (int j = 0; j < n; j++)
+            dp[0][j] = true;
+    
+        // first element
+        if (arr[0] <= sum)
+            dp[arr[0]][0] = true;
+    
+        for (int i = 1; i <= sum; i++) {
+            for (int j = 1; j < n; j++) {
+                bool notTake = dp[i][j - 1];
+                bool take = (arr[j] <= i) ? dp[i - arr[j]][j - 1] : false;
+                dp[i][j] = take || notTake;
+            }
+        }
+    
+        return dp[sum][n - 1];
+    }
+    
+    // So what we did in the tabulation solution was we took the dp array as sum X index. So the next column is dependent on the previous column
+    bool solveSO(vector<int>& arr, int sum, int n){
+        vector<bool> prev(sum + 1, false);
+        
+        
+        prev[0] = true;
+        
+        if (arr[0] <= sum)
+            prev[arr[0]] = true;
+        
+        for(int j = 1; j < n; j++){
+            vector<bool> curr(sum + 1, false);
+            curr[0] = true;
+            
+            for(int s = 1; s <= sum; s++){
+                
+                bool notTake = prev[s];
+                bool take = (arr[j] <= s) ? prev[s - arr[j]] : false;
+                curr[s] = take || notTake;
+            }
+            prev = curr;
+        }
+        
+        return prev[sum];
+        
+    }//we should have done the index X sum dp for better understanding and avoiding confusion
+    
+    bool isSubsetSum(vector<int>& arr, int sum) {
+        
+        int n = arr.size();
+        
+        // bool ans = solve(arr, sum, n - 1);
+        
+        // vector<vector<int>> dp(sum + 1, vector<int>(n, -1));
+        // bool ans = solveMem(arr, sum, n - 1, dp);
+        
+        //bool ans = solveTab(arr, sum, n);
+        bool ans = solveSO(arr, sum, n);
+        return ans;
+    }
+};
