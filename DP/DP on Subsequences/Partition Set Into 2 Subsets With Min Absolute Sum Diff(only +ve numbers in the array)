@@ -1,0 +1,45 @@
+// The approach is based on the **subset sum dynamic programming** idea: first compute the total sum of all elements, then try to find a subset whose sum is as close as possible to half of this total. A DP table is used to track which subset sums are possible using the given elements by making a take-or-not-take decision for each number. Once all possible subset sums are known, only sums up to half of the total are checked, because any larger sum would produce the same difference in reverse. The subset sum closest to half the total gives the minimum possible absolute difference between the two partition sums.
+
+
+class Solution {
+public:
+    int solveTab(vector<int>& arr, int sum, int n) {
+        vector<vector<bool>> dp(sum + 1, vector<bool>(n, false));
+    
+        for (int j = 0; j < n; j++)
+            dp[0][j] = true;
+
+        if (arr[0] <= sum)
+            dp[arr[0]][0] = true;
+    
+        for (int i = 1; i <= sum; i++) {
+            for (int j = 1; j < n; j++) {
+                bool notTake = dp[i][j - 1];
+                bool take = (arr[j] <= i) ? dp[i - arr[j]][j - 1] : false;
+                dp[i][j] = take || notTake;
+            }
+        }
+
+        long long minAbsDiff = LLONG_MAX;
+        for(int i = 0; i <= sum/2; i++){
+            if(dp[i][n - 1] == true){
+                long long diff = llabs((long long)i - (sum - i));
+                minAbsDiff = (int)min(minAbsDiff, diff);
+            }
+        }
+
+        return minAbsDiff;
+    }
+    int minimumDifference(vector<int>& nums) {
+
+        int n = nums.size();
+
+        int sum = 0;
+        for(int i = 0; i < n; i++){
+            sum += nums[i];
+        }
+
+        int ans = solveTab(nums, sum, n);
+        return ans;
+    }
+};
