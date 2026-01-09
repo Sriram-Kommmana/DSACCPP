@@ -1,0 +1,47 @@
+// This is the follow up question for the prev question i.e. Count subsets with sum K (Perfect sum Problem).
+
+class Solution {
+  public:
+    int solvePerfectSumSO(vector<int> arr, int sum){
+        
+        int n = arr.size();
+        vector<int> prev(sum + 1, 0);
+        
+        for(int i = 0; i <= sum; i++){
+            if(i == 0 && arr[0] == 0) prev[i] = 2;
+            else if(i == 0 || i == arr[0]) prev[i] = 1;
+        }
+        
+        for(int i = 1; i < n; i++){
+            vector<int> curr(sum + 1, 0);
+            for(int j = 0; j <= sum; j++){
+                int notTake = prev[j];
+                int take = 0;
+                if (arr[i] <= j)
+                    take = prev[j - arr[i]];
+                
+                curr[j] = take + notTake;
+            }
+            prev = curr;
+        }
+        
+        return prev[sum];
+        
+    }
+    int countPartitions(vector<int>& arr, int diff) {
+        
+        int n = arr.size();
+        
+        int totalSum = 0;
+        for(int i = 0; i < n; i++){
+            totalSum += arr[i];
+        }
+        
+        if(totalSum - diff < 0 || (totalSum - diff) % 2 != 0) return 0;
+        
+        int ans = solvePerfectSumSO(arr, (totalSum - diff) / 2);
+        
+        return ans;
+        
+    }
+};
