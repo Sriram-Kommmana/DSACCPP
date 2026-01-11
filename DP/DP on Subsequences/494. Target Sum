@@ -1,0 +1,63 @@
+class Solution {
+public:
+    // if you are thinking in this way it is okay(but not okay) but will have to write many out of bounds cases and base cases which is not optimal
+    int solve(vector<int>& nums, int target, int index){
+
+        if(index == 0){
+            if(target + nums[index] == 0 || target - nums[index] == 0) return 1;
+            else return 0;
+        }
+
+        int plus = solve(nums, target - nums[index], index - 1);
+        int minus = solve(nums, target + nums[index], index - 1);
+
+        return plus + minus;
+    }
+
+    //We have to think this question in a different perspective - i.e. dividing the set in to two subsets and subtracting them. S1 - S2 = d type of question
+
+    int solvePerfectSumSO(vector<int> arr, int sum){
+        
+        int n = arr.size();
+        vector<int> prev(sum + 1, 0);
+        
+        for(int i = 0; i <= sum; i++){
+            if(i == 0 && arr[0] == 0) prev[i] = 2;
+            else if(i == 0 || i == arr[0]) prev[i] = 1;
+        }
+        
+        for(int i = 1; i < n; i++){
+            vector<int> curr(sum + 1, 0);
+            for(int j = 0; j <= sum; j++){
+                int notTake = prev[j];
+                int take = 0;
+                if (arr[i] <= j)
+                    take = prev[j - arr[i]];
+                
+                curr[j] = take + notTake;
+            }
+            prev = curr;
+        }
+        
+        return prev[sum];
+        
+    }
+
+    int findTargetSumWays(vector<int>& nums, int target) {
+        
+        int n = nums.size();
+
+        // int ans = solve(nums, target, n - 1);
+
+        int sum = 0;
+        for(int i = 0; i < n; i++){
+            sum += nums[i];
+        }
+
+        if(sum - target < 0 || (sum - target) % 2 != 0) return 0;
+        
+        int ans = solvePerfectSumSO(nums, (sum - target) / 2);
+
+        return ans;
+    }
+};
