@@ -1,0 +1,33 @@
+    int solveOptimizedUsingBinarySearch(vector<int>& nums){
+
+        vector<int> temp;
+        temp.push_back(nums[0]);
+
+        int len = 1;
+
+        for(int i = 1; i < nums.size(); i++){
+            if(nums[i] > temp.back()){
+                temp.push_back(nums[i]);
+                len++;
+            }else{
+                int lowereBoundIndex = lower_bound(temp.begin(), temp.end(), nums[i]) - temp.begin(); // here we are doing - temp.begin() just because (no viable conversion from iterator to int) 
+                temp[lowereBoundIndex] = nums[i];
+            }
+        }
+
+        return len;
+    }
+
+    int lengthOfLIS(vector<int>& nums) {
+        
+        //int ans = solve(nums, 0, -1);
+        // int n = nums.size();
+        // vector<vector<int>> dp(n, vector<int>(n + 1, -1));
+        // int ans = solveMem(nums, 0, -1, dp);
+
+        // int ans = solveTab(nums);
+
+        int ans = solveOptimizedUsingBinarySearch(nums);
+        return ans;
+
+    }
