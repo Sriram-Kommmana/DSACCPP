@@ -1,0 +1,98 @@
+#Decimal to Binary Conversion:
+
+#include <iostream>
+#include<string>
+#include<algorithm>
+using namespace std;
+
+void decimal_to_binary(int n){
+    
+    string ans = "";
+    
+    while(n != 0){
+        (n % 2 == 1) ? ans += '1' : ans += '0';
+        n = n / 2;
+    }
+    reverse(ans.begin(), ans.end());
+    
+    cout << ans;
+    
+}
+int main() {
+    decimal_to_binary(13);
+
+    return 0;
+}
+________________________________________________________________________________________________________________________________________________________________________________________
+
+#Decimal to Binary Conversion(Using bitwise operators):
+
+#include <iostream>
+#include<string>
+#include<algorithm>
+using namespace std;
+
+void decimal_to_binary(int n){
+    
+    string ans = "";
+    
+    if (n == 0) {
+        cout << "0";
+        return;
+    }
+    while(n != 0){
+        (n & 1 == 1) ? ans += '1' : ans += '0';
+        n = n >> 1;
+    }
+    reverse(ans.begin(), ans.end());
+    
+    cout << ans;
+}
+int main() {
+    decimal_to_binary(13);
+    return 0;
+}
+________________________________________________________________________________________________________________________________________________________________________________________
+
+#Binary to Decimal Conversion:
+
+#include <iostream>
+#include<string>
+#include<algorithm>
+using namespace std;
+
+void binary_to_decimal(string s){
+    
+    int base = 1;
+    int number = 0;
+    
+    int n = s.length();
+    for(int i = n - 1; i >= 0; i--){
+        if(s[i] == '1') number += base;
+        base = base << 1;
+    }
+    cout<<number;
+}
+int main() {
+    binary_to_decimal("1110101001");
+    return 0;
+}
+________________________________________________________________________________________________________________________________________________________________________________________
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
