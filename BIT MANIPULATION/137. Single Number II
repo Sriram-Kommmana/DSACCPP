@@ -1,0 +1,125 @@
+// Brute force -> using maps:
+
+#include <unordered_map>
+#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        unordered_map<int, int> freq;
+        for (int x : nums) {
+            freq[x]++;
+        }
+
+        for (auto &p : freq) {
+            if (p.second == 1)
+                return p.first;
+        }
+        return -1; // never reached
+    }
+};
+________________________________________________________________________________________________________________________________________
+// Bit counting (count set bits at each position):
+
+// Idea:
+// This is the classic optimal approach.
+// Every number appears 3 times, except one
+// For each bit position (0 to 31):
+
+// Count how many numbers have that bit set
+// If count % 3 == 1, that bit belongs to the unique number
+// Why it works
+// Bits of numbers that appear 3 times cancel out modulo 3.
+// Only the unique number contributes leftover bits.
+
+// Complexity
+// Time: O(32 * n) → O(n)
+// Space: O(1)
+// Important detail
+// Works correctly for negative numbers too (2’s complement).
+
+#include <vector>
+using namespace std;
+------------------------------------------------------------------
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int ans = 0;
+
+        for (int bit = 0; bit < 32; bit++) {
+            int count = 0;
+            for (int x : nums) {
+                if ((x >> bit) & 1)
+                    count++;
+            }
+            if (count % 3 == 1) {
+                ans |= (1 << bit);
+            }
+        }
+        return ans;
+    }
+};
+________________________________________________________________________________________________________________________________________
+// Sorting and checking groups of three:
+
+// Idea
+// Sort the array
+// Since every number appears 3 times, equal elements will be adjacent
+// Traverse in steps of 3:
+// If nums[i] != nums[i+1], then nums[i] is the unique number
+// Correct pointer logic
+// You move by 3, not 2.
+
+// Example
+// [2,2,2,5,7,7,7]
+// → at index 3, nums[3] != nums[4], so answer is 5
+
+// Complexity
+// Time: O(n log n)
+// Space: O(1) (ignoring sort stack)
+---------------------------------------------------------------------
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+
+        int n = nums.size();
+        for (int i = 0; i < n - 1; i += 3) {
+            if (nums[i] != nums[i + 1])
+                return nums[i];
+        }
+        // If unique element is at the end
+        return nums[n - 1];
+    }
+};
+________________________________________________________________________________________________________________________________________
+// Using buckets (Bitmask / Finite State Machine)
+// This is the most elegant and interview-loved solution.
+
+// Idea
+// We use two variables (buckets):
+// ones → bits that have appeared once
+// twos → bits that have appeared twice
+
+// nums[i] will go to ones if it is not in twos
+// nums[i] will go to twos if it is ones
+---------------------------------------------------------------------------
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        
+        int ones = 0, twos = 0;
+        for(int i = 0; i < nums.size(); i++){
+            ones = (ones ^ nums[i]) & (~twos);
+            twos = (twos ^ nums[i]) & (~ones);
+        }
+        return ones;
+    }
+};
+
+________________________________________________________________________________________________________________________________________
