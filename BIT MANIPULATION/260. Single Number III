@@ -1,0 +1,41 @@
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        long long exor = 0;
+        for(int num: nums) exor = exor ^ num;
+
+        exor = (exor & (exor - 1)) ^ exor;
+        // exor = exor & -exor; (this also gives the rightmost bit that is set)
+
+        int bucket1 = 0, bucket2 = 0;
+
+        for(int num: nums){
+            if(num & exor){
+                bucket1 = bucket1 ^ num;
+            }else{
+                bucket2 = bucket2 ^ num;
+            }
+        }
+        return {bucket1, bucket2};
+    }
+};
+
+------------------------------------------------------------------------------------------------------
+// Every number appears twice except two numbers
+// XOR is perfect here because:
+// a ^ a = 0
+// a ^ 0 = a
+// XORing all numbers:
+// all paired numbers cancel out
+// you’re left with x ^ y (the two unique numbers)
+
+// The challenge:
+// ->separate x and y
+
+// Now we use the concept of buckets
+// we XORed x and y right so from that xored result we find the rightmost bit that is set
+// cus that bit is different for 2 nos that appear once
+
+// and then we traverse through all the elements o the array and separate the elements that have that bit set and the elements that dont have that bit as set
+// we dont have to store bukets as arrays, but we can xor them as nos appearing twice will be removed
+// then we get the 2 nos
