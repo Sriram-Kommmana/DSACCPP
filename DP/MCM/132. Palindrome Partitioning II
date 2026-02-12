@@ -1,0 +1,28 @@
+class Solution {
+public:
+    bool isPalindrome(string &s, int i, int j){
+        while(i < j){
+            if(s[i] != s[j]) return false;
+            i++;
+            j--;
+        }
+        return true;
+    }
+    int solve(string &s, int i, int n){
+        if(i == n) return 0;
+
+        int mini = INT_MAX;
+        for(int k = i; k < n; k++){
+            if(isPalindrome(s, i, k)){
+                int cuts = 1 + solve(s, k + 1, n);
+                mini = min(mini, cuts);
+            }
+        }
+        return mini;
+    }
+    int minCut(string s) {
+        int n = s.size();
+        int ans = solve(s, 0, n) - 1;
+        return ans;
+    }
+};
