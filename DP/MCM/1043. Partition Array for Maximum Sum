@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int solve(vector<int> &arr, int k, int i, int n){
+        if(i == n) return 0;
+
+        int len = 0;
+        int maxi = INT_MIN;
+        int maxAns = INT_MIN;
+        for(int ind = i; ind < min(i + k, n); ind++){
+            len++;
+            maxi = max(maxi, arr[ind]);
+            int sum = len * maxi + solve(arr, k, ind + 1, n);
+            maxAns = max(maxAns, sum);
+        }
+
+        return maxAns;
+    }
+    int maxSumAfterPartitioning(vector<int>& arr, int k) {
+        int n = arr.size();
+        int ans = solve(arr, k, 0, n);
+        return ans;
+    }
+};
