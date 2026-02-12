@@ -1,0 +1,48 @@
+// User function Template for C++
+class Solution {
+  public:
+    int solve(string &s, int i, int j, int isTrue){
+        
+        if(i > j) return 0;
+        if(i == j){
+            if(isTrue == 1) return (s[i] == 'T')? 1 : 0;
+            else return (s[i] == 'F') ? 1 : 0;
+        }
+        
+        long long ways = 0;
+        for(int k = i + 1; k <= j -1; k= k + 2){
+            
+            long long lT = solve(s, i, k - 1, 1);
+            long long lF = solve(s, i, k - 1, 0);
+            long long rT = solve(s, k + 1, j, 1);
+            long long rF = solve(s, k + 1, j, 0);
+            
+            if(s[k] == '&'){
+                if(isTrue == 1){
+                    ways = ways + (lT * rT);
+                }
+                else ways = ways + (lT * rF) + (lF * rT) + (lF * rF);
+            }
+            else if(s[k] == '|'){
+                if(isTrue == 1){
+                    ways = ways + (lT * rF) + (lF * rT) + (lT * rT);
+                }
+                else ways = ways + (rF * lF);
+            }
+            else if(s[k] == '^'){
+                if(isTrue == 1){
+                    ways = ways + (lT * rF) + (lF * rT);
+                }
+                else ways = ways + (rF * lF) + (lT * rT);
+            }
+        }
+        return ways;
+    }
+    int countWays(string &s) {
+        
+        int n = s.size();
+        int ans = solve(s, 0, n - 1, 1);
+        return ans;
+        
+    }
+};
