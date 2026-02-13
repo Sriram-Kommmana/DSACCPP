@@ -38,10 +38,105 @@ class Solution {
         }
         return ways;
     }
+    
+    int solveMem(string &s, int i, int j, int isTrue, vector<vector<vector<int>>> &dp){
+        
+        if(i > j) return 0;
+        if(i == j){
+            if(isTrue == 1) return (s[i] == 'T')? 1 : 0;
+            else return (s[i] == 'F') ? 1 : 0;
+        }
+        
+        if(dp[i][j][isTrue] != -1) return dp[i][j][isTrue];
+        
+        long long ways = 0;
+        for(int k = i + 1; k <= j -1; k= k + 2){
+            
+            long long lT = solveMem(s, i, k - 1, 1, dp);
+            long long lF = solveMem(s, i, k - 1, 0, dp);
+            long long rT = solveMem(s, k + 1, j, 1, dp);
+            long long rF = solveMem(s, k + 1, j, 0, dp);
+            
+            if(s[k] == '&'){
+                if(isTrue == 1){
+                    ways = ways + (lT * rT);
+                }
+                else ways = ways + (lT * rF) + (lF * rT) + (lF * rF);
+            }
+            else if(s[k] == '|'){
+                if(isTrue == 1){
+                    ways = ways + (lT * rF) + (lF * rT) + (lT * rT);
+                }
+                else ways = ways + (rF * lF);
+            }
+            else if(s[k] == '^'){
+                if(isTrue == 1){
+                    ways = ways + (lT * rF) + (lF * rT);
+                }
+                else ways = ways + (rF * lF) + (lT * rT);
+            }
+        }
+        return dp[i][j][isTrue] = ways;
+    }
+    
+    int solveTab(string &s){
+        
+        int n = s.size();
+        vector<vector<vector<int>>> dp(n, vector<vector<int>>(n, vector<int>(2, 0)));
+        
+        for(int i = n - 1; i >= 0; i--){
+            for(int j = i; j<= n - 1; j++){
+                for(int isTrue = 0; isTrue <= 1; isTrue++){
+                    if(i == j){
+                        if(isTrue == 1) (s[i] == 'T')? dp[i][j][isTrue] = 1 : dp[i][j][isTrue] = 0;
+                        else (s[i] == 'F') ? dp[i][j][isTrue] = 1 : dp[i][j][isTrue] = 0;
+                        continue;
+                    }
+                    
+                    long long ways = 0;
+                    for(int k = i + 1; k <= j - 1; k= k + 2){
+                        
+                        long long lT = dp[i][k - 1][1];
+                        long long lF = dp[i][k - 1][0];
+                        long long rT = dp[k + 1][j][1];
+                        long long rF = dp[k + 1][j][0];
+                        
+                        if(s[k] == '&'){
+                            if(isTrue == 1){
+                                ways = ways + (lT * rT);
+                            }
+                            else ways = ways + (lT * rF) + (lF * rT) + (lF * rF);
+                        }
+                        else if(s[k] == '|'){
+                            if(isTrue == 1){
+                                ways = ways + (lT * rF) + (lF * rT) + (lT * rT);
+                            }
+                            else ways = ways + (rF * lF);
+                        }
+                        else if(s[k] == '^'){
+                            if(isTrue == 1){
+                                ways = ways + (lT * rF) + (lF * rT);
+                            }
+                            else ways = ways + (rF * lF) + (lT * rT);
+                        }
+                    }
+                    dp[i][j][isTrue] = ways;
+                    
+                }
+            }
+        }
+        return dp[0][n - 1][1];
+    }
+    
     int countWays(string &s) {
         
         int n = s.size();
-        int ans = solve(s, 0, n - 1, 1);
+        // int ans = solve(s, 0, n - 1, 1);
+        
+        // vector<vector<vector<int>>> dp(n, vector<vector<int>>(n, vector<int>(2, -1)));
+        // int ans = solveMem(s, 0, n - 1, 1, dp);
+        
+        int ans = solveTab(s);
         return ans;
         
     }
