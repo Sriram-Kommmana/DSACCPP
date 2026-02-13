@@ -15,9 +15,56 @@ public:
 
         return maxAns;
     }
+
+    int solveMem(vector<int> &arr, int k, int i, int n, vector<int> &dp){
+
+        if(i == n) return 0;
+
+        if(dp[i] != -1) return dp[i];
+
+        int len = 0;
+        int maxi = INT_MIN;
+        int maxAns = INT_MIN;
+        for(int ind = i; ind < min(i + k, n); ind++){
+            len++;
+            maxi = max(maxi, arr[ind]);
+            int sum = len * maxi + solveMem(arr, k, ind + 1, n, dp);
+            maxAns = max(maxAns, sum);
+        }
+
+        return dp[i] = maxAns;
+    }
+
+    int solveTab(vector<int>& arr, int k){
+
+        int n = arr.size();
+        vector<int> dp(n + 1, 0);
+
+        for(int i = n - 1; i >= 0; i--){
+            int len = 0;
+            int maxi = INT_MIN;
+            int maxAns = INT_MIN;
+            for(int ind = i; ind < min(i + k, n); ind++){
+                len++;
+                maxi = max(maxi, arr[ind]);
+                int sum = len * maxi + dp[ind + 1];
+                maxAns = max(maxAns, sum);
+            }
+
+            dp[i] = maxAns;
+        }
+        return dp[0];
+    }
+
     int maxSumAfterPartitioning(vector<int>& arr, int k) {
         int n = arr.size();
-        int ans = solve(arr, k, 0, n);
+        
+        // int ans = solve(arr, k, 0, n);
+        
+        // vector<int> dp(n, -1);
+        // int ans = solveMem(arr, k, 0, n, dp);
+
+        int ans = solveTab(arr, k);
         return ans;
     }
 };
