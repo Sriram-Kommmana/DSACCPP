@@ -20,9 +20,48 @@ public:
         }
         return mini;
     }
+
+    int solveMem(string &s, int i, int n, vector<int> &dp){
+        if(i == n) return 0;
+
+        if(dp[i] != -1) return dp[i];
+
+        int mini = INT_MAX;
+        for(int k = i; k < n; k++){
+            if(isPalindrome(s, i, k)){
+                int cuts = 1 + solveMem(s, k + 1, n, dp);
+                mini = min(mini, cuts);
+            }
+        }
+        return dp[i] = mini;
+    }
+
+    int solveTab(string &s){
+
+        int n = s.size();
+        vector<int> dp(n + 1, 0);
+        
+        for(int i = n - 1; i >= 0; i--){
+            int mini = INT_MAX;
+            for(int k = i; k < n; k++){
+                if(isPalindrome(s, i, k)){
+                    int cuts = 1 + dp[k + 1];
+                    mini = min(mini, cuts);
+                }
+            }
+            dp[i] = mini;
+        }
+        return dp[0];
+    }
+
     int minCut(string s) {
         int n = s.size();
-        int ans = solve(s, 0, n) - 1;
+        // int ans = solve(s, 0, n) - 1;
+
+        // vector<int> dp(n, -1);
+        // int ans = solveMem(s, 0, n, dp) - 1;
+
+        int ans = solveTab(s) - 1;
         return ans;
     }
 };
