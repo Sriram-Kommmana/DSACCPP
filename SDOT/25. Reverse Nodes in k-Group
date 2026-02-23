@@ -1,0 +1,79 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode reverseKGroup(ListNode head, int k) {
+    
+        if(k == 1 || head == null) return head;
+
+        boolean reverse = false;
+        ListNode prev = null;
+        ListNode current  = head;
+        ListNode nextNode = current.next; 
+
+        while(true){
+
+            ListNode last = prev;
+            ListNode newEnd = current;
+            
+            
+            for(int i = 0; i < k; i++){
+                current.next = prev;
+                prev = current;
+                current = nextNode;
+                
+                if(current == null && (i +1 != k)){
+                   reverse = true;
+                   break;
+                }
+
+                 if(nextNode != null) 
+                    nextNode = nextNode.next;
+            }
+
+            if(reverse){
+                 current = prev;
+                    prev = null;
+                    nextNode = current.next;
+                    while(current != last){
+                        current.next = prev;
+                        prev = current;
+                        current = nextNode;
+                        if(nextNode != last)
+                            nextNode = nextNode.next;
+                    }
+
+                       ListNode temp = head;
+                        while(temp != null){
+                            System.out.println(temp.val);
+                            temp = temp.next;
+                        }
+
+
+                    return head;
+            }
+            
+            if(last == null ) head = prev;
+            else last.next = prev;
+
+            newEnd.next = current;
+
+            //traverse prev to new prev position that is current - 1 node
+            for(int i = 0;prev != null && i < k -1 ; i++){
+                prev = prev.next;
+            }
+            
+            if(current == null){
+                break;
+            }
+        }
+
+    return head;
+    }
