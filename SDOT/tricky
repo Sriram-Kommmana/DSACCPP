@@ -10,3 +10,15 @@ class Main {
         System.out.println("Smaller is " + d);
     }
 }
+
+____________________________________________________________________________________________________________________
+
+class Main {
+    public static void main(String[] args) {
+        // Sum of digit until single digit
+        int a = 49;
+        
+        int ans = (a % 9 == 0)? 9 : (a % 9);
+        System.out.println(ans);
+    }
+}
